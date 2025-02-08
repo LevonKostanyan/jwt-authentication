@@ -1,17 +1,20 @@
-import React, {useEffect, useState} from "react";
-import api from "../../services/api.js";
-import useAuthStore from "../../store/authStore.js";
+import React, {useEffect} from "react";
 import "./Dashboard.css";
+import useDashboardStore from "../../store/dashboardStore.js";
+import useAuthStore from "../../store/authStore.js";
+import {useNavigate} from "react-router-dom";
 
 const Dashboard = () => {
-    const logout = useAuthStore((state) => state.logout);
-    const [users, setUsers] = useState([]);
-
+    const {fetchUsers, users} = useDashboardStore();
+    const {logout, user} = useAuthStore();
+    const navigate = useNavigate();
     useEffect(() => {
-        api.get("/auth/users")
-            .then((res) => setUsers(res.data.users))
-            .catch(() => alert("Unauthorized"));
-    }, []);
+        if (user) {
+            fetchUsers()
+        } else {
+            navigate('/login')
+        }
+    }, [user]);
 
     return (
         <div className="dashboard-container">

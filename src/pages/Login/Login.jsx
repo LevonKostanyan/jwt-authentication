@@ -1,11 +1,11 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import api from "../../services/api.js";
 import useAuthStore from "../../store/authStore.js";
 import {useNavigate} from "react-router-dom";
 import "./Login.css";
+import {loginRequest} from "../../requests/auth.js";
 
 const schema = yup.object().shape({
     username: yup.string().required("Username is required"),
@@ -16,24 +16,19 @@ const Login = () => {
     const {register, handleSubmit, formState: {errors}} = useForm({
         resolver: yupResolver(schema),
     });
-    const setToken = useAuthStore((state) => state.setToken);
+    const {login, user} = useAuthStore();
+    useEffect(() => {
+        if (user) {
+            navigate("/dashboard");
+        }
+    }, [user]);
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        try {
-            const response = await api.post("/auth/login", data);
-            const token = response.data.accessToken;
-
-            if (!token) {
-                alert("Login failed: No token received");
-                return;
-            }
-
-            setToken(token);
-            localStorage.setItem("token", token);
+        const user = await loginRequest(data)
+        if (user) {
+            login(user);
             navigate("/dashboard");
-        } catch (error) {
-            alert("Login failed");
         }
     };
 

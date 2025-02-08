@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css'
 import {Routes, Route, Navigate} from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login/Login.jsx";
 import Dashboard from "./pages/Dashboard/Dashboard.jsx";
 
@@ -12,11 +11,7 @@ const App = () => {
             <Route path="/login" element={<Login/>}/>
             <Route
                 path="/dashboard"
-                element={
-                    <ProtectedRoute>
-                        <Dashboard/>
-                    </ProtectedRoute>
-                }
+                element={<Dashboard/>}
             />
             <Route path="*" element={<Navigate to="/dashboard"/>}/>
         </Routes>
