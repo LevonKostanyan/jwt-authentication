@@ -5,8 +5,6 @@ const api = axios.create({
     baseURL: "https://dummyjson.com",
 });
 
-console.log("api", useAuthStore)
-
 api.interceptors.request.use((config) => {
     const token = useAuthStore.getState().token;
     if (token) {
@@ -20,7 +18,7 @@ api.interceptors.response.use(
     (error) => {
         if (error.response?.status === 401) {
             useAuthStore.getState().logout();
-            window.location.href = "/login";
+            window.location.href = "/Login";
         }
         return Promise.reject(error);
     }
