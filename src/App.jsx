@@ -4,7 +4,6 @@ import {Routes, Route, Navigate} from "react-router-dom";
 import Login from "./pages/Login/Login.jsx";
 import Dashboard from "./pages/Dashboard/Dashboard.jsx";
 
-
 const App = () => {
     return (
         <Routes>

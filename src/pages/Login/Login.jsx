@@ -17,20 +17,20 @@ const Login = () => {
         resolver: yupResolver(schema),
     });
     const {login, user} = useAuthStore();
-    useEffect(() => {
-        if (user) {
-            navigate("/dashboard");
-        }
-    }, [user]);
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
         const user = await loginRequest(data)
         if (user) {
             login(user);
-            navigate("/dashboard");
         }
     };
+
+    useEffect(() => {
+        if (user) {
+            navigate("/dashboard");
+        }
+    }, [user]);
 
     return (
         <div className="login-container">

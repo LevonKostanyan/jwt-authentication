@@ -2,7 +2,6 @@ import axios from 'axios';
 import {refreshTokenRequest} from "../requests/auth.js";
 import useAuthStore from "../store/authStore.js";
 
-
 const api = axios.create({
     baseURL: 'https://dummyjson.com',
     timeout: 5000,
@@ -42,7 +41,7 @@ api.interceptors.response.use(
         const refreshToken = localStorage.getItem(storageRefreshTokenKey);
         if (!refreshToken) {
             authStore.logout();
-            return Promise.resolve(error);
+            return Promise.reject(error);
         }
 
         const originalRequest = error.config;
@@ -60,7 +59,7 @@ api.interceptors.response.use(
 
         if (isRefreshing) {
             authStore.logout();
-            return Promise.resolve(null);
+            return Promise.reject(error);
         }
 
         isRefreshing = true;
@@ -71,7 +70,7 @@ api.interceptors.response.use(
             return api(originalRequest);
         } else {
             authStore.logout();
-            return Promise.resolve(null);
+            return Promise.reject(error);
         }
     },
 );
